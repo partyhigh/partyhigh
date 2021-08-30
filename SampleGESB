@@ -1,0 +1,55 @@
+package core.java;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class SSName {
+	
+	public static void main(String[] args) throws Exception {
+	
+	String[][] commands = new String[][]
+			{
+			 {"CMD", "/C", "WMIC OS GET Installdate,SerialNumber"},
+			 //OS Installation date & Time, OS Serial Number
+			 {"CMD", "/C", "WMIC BASEBOARD GET SerialNumber"},
+			 // Motherboadrd Serial Number 
+			 {"CMD", "/C", "WMIC CPU GET ProcessorId"}, 
+			// Processor ID 
+			 {"CMD", "/C", "WMIC COMPUTERSYSTEM GET Name,domain,NumberofProcessors,totalPhysicalMemory"},
+			// Computer Name
+			 {"CMD", "/C", "WMIC diskdrive GET Name, Manufacturer, Model, InterfaceType, MediaLoaded, MediaType"},
+			//HDD Details 
+			 {"CMD", "/C", "WMIC memphysical GET Manufacturer, Model, SerialNumber, MaxCapacity, MemoryDevices"}, 
+			 {"CMD", "/C", "WMIC cdrom GET Name,Drive,VolumeName"},
+			 {"CMD", "/C", "WMIC environment get Description, VariableValue"},
+			 {"CMD", "/C", "WMIC logicaldisk get Name, Compressed, Description, DriveType, FileSystem,FreeSpace, SupportsDiskQuotas, VolumeDirty, VolumeName"}
+			 }; 
+
+			 for (int i = 0; i < commands.length; i++)
+			 {
+
+			 String[] com = commands[i];
+			 Process process = Runtime.getRuntime().exec(com);
+			 process.getOutputStream().close();
+			 //Closing output stream of the process
+			 System.out.println();
+			 String s = null;
+			 //Reading sucessful output of the command
+			 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream())); 
+
+			 while ((s = reader.readLine()) != null) 
+			{ 
+			 System.out.print(s);
+			 }
+
+			 // Reading error if any 
+			 reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+			 while ((s = reader.readLine()) != null)
+			 { 
+			 System.out.print(s); 
+			 }
+
+			 }
+	}
+}
